@@ -2,7 +2,7 @@ package com.travel.interceptor;
 
 import com.travel.common.SessionEntity;
 import com.travel.exception.NotLoginException;
-import com.travel.utils.SessionUtils;
+import com.travel.utils.CacheUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,11 +24,14 @@ public class MyInterceptor implements HandlerInterceptor {
         if (request.getMethod().toLowerCase().equals("options")) {
             return true;
         }
+        String cacheId = request.getHeader("token");
         // 未登录
-        SessionEntity sessionEntity = SessionUtils.getSessionEntity(request);
+        SessionEntity sessionEntity = (SessionEntity) CacheUtils.getCache(cacheId);
         if (sessionEntity == null) {
             throw new NotLoginException();
         }
+        // 更新当前用户的登录过期时间
+        CacheUtils.updateCacheTime(cacheId);
         return true;
     }
 

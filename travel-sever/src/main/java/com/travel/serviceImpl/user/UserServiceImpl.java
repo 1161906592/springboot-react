@@ -10,7 +10,7 @@ import com.travel.model.user.UserDo;
 import com.travel.model.user.UserRegisterDto;
 import com.travel.model.user.UserVo;
 import com.travel.service.user.UserService;
-import com.travel.utils.SessionUtils;
+import com.travel.utils.CacheUtils;
 import com.travel.utils.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,12 +39,12 @@ public class UserServiceImpl implements UserService {
         }
         SessionEntity sessionEntity = new SessionEntity();
         BeanUtils.copyProperties(user, sessionEntity);
-        return SessionUtils.setSession(session, sessionEntity);
+        return CacheUtils.setCache(sessionEntity);
     }
 
     @Override
     public void logout(HttpServletRequest request) {
-        SessionUtils.removeSession(request);
+        CacheUtils.removeCache(request.getHeader("token"));
     }
 
     @Override
@@ -65,6 +65,6 @@ public class UserServiceImpl implements UserService {
         }
         SessionEntity sessionEntity = new SessionEntity();
         BeanUtils.copyProperties(userDo, sessionEntity);
-        return SessionUtils.setSession(session, sessionEntity);
+        return CacheUtils.setCache(sessionEntity);
     }
 }
