@@ -1,0 +1,45 @@
+.sider {
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow: auto;
+}
+
+.logo {
+  height: 32px;
+  background: rgba(255, 255, 255, .2);
+  line-height: 32px;
+  color: #fff;
+}
+
+.layoutHeader {
+  background: #fff;
+
+  .trigger {
+    line-height: 64px;
+    transition: color .3s;
+
+    &:hover {
+      color: #1890ff;
+    }
+  }
+}
+
+.layoutRight {
+  transition: all .2s;
+
+  &.noCollapsed {
+    margin-left: 200px;
+  }
+
+  &.isCollapsed {
+    margin-left: 80px;
+  }
+}
+
+.main {
+  min-height: calc(100vh - 104px);
+  background: #fff;
+}

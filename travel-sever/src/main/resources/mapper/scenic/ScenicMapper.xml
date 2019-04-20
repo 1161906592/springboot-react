@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.travel.mapper.scenic.ScenicMapper">
+  <select id="getScenic" resultType="com.travel.model.scenic.ScenicVo" parameterType="String">
+    SELECT id, name, address, img, introduce
+    FROM scenic_img
+    WHERE name like CONCAT('%',#{name},'%')
+  </select>
+</mapper>

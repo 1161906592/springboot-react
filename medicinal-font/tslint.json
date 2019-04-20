@@ -1,0 +1,12 @@
+{
+  "extends": ["tslint-react"],
+  "rules": {
+    // override tslint-react rules here
+  },
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts"
+    ]
+  }
+}
