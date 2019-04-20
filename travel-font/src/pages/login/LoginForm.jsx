@@ -14,6 +14,7 @@ class LoginForm extends React.Component {
         if (status === 1) {
           localStorage.setItem("token", data);
           aMessage.success("登录成功");
+          this.props.history.push(localStorage.getItem("currentPath") || "/");
         } else {
           aMessage.error(message);
         }

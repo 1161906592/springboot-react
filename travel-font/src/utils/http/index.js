@@ -11,13 +11,13 @@ const axiosInstance = axios.create({
   timeout: 0, // 请求超时时间
   withCredentials: true,
   headers: {
-    "Content-Type": "application/json;charset=utf-8",
-    "token": localStorage.getItem("token")
+    "Content-Type": "application/json;charset=utf-8"
   }
 });
 
 axiosInstance.interceptors.request.use((config) => {
   NProgress.start();
+  config.headers["token"] = localStorage.getItem("token");
   return config
 });
 

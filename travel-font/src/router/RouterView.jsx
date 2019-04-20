@@ -21,6 +21,9 @@ const authenticateRoute = (item) => {
   if (baseRoutes.concat(routes).some((pathname) => !!matchPath(pathname, { path: item.fullPath }))) {
     if (item.name) {
       document.title = item.name;
+      if (item.fullPath !== "/login") {
+        localStorage.setItem("currentPath", item.fullPath)
+      }
     }
     return <item.component />;
   }
