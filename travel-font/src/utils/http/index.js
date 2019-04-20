@@ -16,28 +16,20 @@ const axiosInstance = axios.create({
   }
 });
 
-axiosInstance.interceptors.request.use((config ) => {
+axiosInstance.interceptors.request.use((config) => {
   NProgress.start();
   return config
-})
+});
 
 axiosInstance.interceptors.response.use((response) => {
   NProgress.done();
+  if (response.data.status === 4) {
+    router.push("/login")
+  }
   return response;
 }, (error) => {
   NProgress.done();
-  let errorString = error.toString();
-  if (error) {
-    if (errorString.endsWith("401")) {
-      router.push("/login");
-    } else if (errorString.endsWith("403")) {
-      message.error("请求无权限");
-    } else if (errorString === "Cancel") {
-      // 手动取消本次请求
-    } else {
-      message.error("请求超时");
-    }
-  }
+  message.error("网络错误");
   return Promise.reject(error);
 });
 

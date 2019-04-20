@@ -35,6 +35,18 @@ public class GlobalExceptionHandler {
         }
         return new ResponseEntity(ResponseStatus.ERROR.getStatus(), message);
     }
+    // 未登录错误
+    @ExceptionHandler(NotLoginException.class)
+    public ResponseEntity handleNotLoginException(HttpServletRequest request, NotLoginException ex) {
+        ex.printStackTrace();
+        return new ResponseEntity(ResponseStatus.NOT_LOGIN.getStatus(), ex.getMessage());
+    }
+    // 请求无权限
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity handleForbiddenException(HttpServletRequest request, ForbiddenException ex) {
+        ex.printStackTrace();
+        return new ResponseEntity(ResponseStatus.FORBIDDEN.getStatus(), ex.getMessage());
+    }
     // 业务错误
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity handleBusinessException(HttpServletRequest request, BusinessException ex) {

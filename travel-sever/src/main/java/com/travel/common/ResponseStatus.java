@@ -3,7 +3,9 @@ package com.travel.common;
 public enum ResponseStatus {
     SUCCESS(1, "SUCCESS"),
     FALSE(2, "FALSE"),
-    ERROR(3, "ERROR");
+    ERROR(3, "ERROR"),
+    NOT_LOGIN(4, "NOT_LOGIN"),
+    FORBIDDEN(5, "FORBIDDEN");
 
     public int getStatus() {
         return status;

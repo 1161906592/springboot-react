@@ -14,13 +14,6 @@ class LoginForm extends React.Component {
         if (status === 1) {
           localStorage.setItem("token", data);
           aMessage.success("登录成功");
-          const { data: { status, data: data1, message } } = await http.get("http://localhost:8080/api/sys/menu");
-          if (status === 1) {
-            localStorage.setItem("userRoutes", data1.join(","));
-            this.props.history.push("/");
-          } else {
-            aMessage.error(message);
-          }
         } else {
           aMessage.error(message);
         }

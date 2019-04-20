@@ -19,7 +19,8 @@ public class WebAppConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns("/user/login") // 登录
                 .excludePathPatterns("/user/register") // 注册
-                .excludePathPatterns("/user/logout"); // 退出
+                .excludePathPatterns("/user/logout") // 退出
+                .excludePathPatterns("/scenic"); // 查询景点
     }
 
     // 跨域
