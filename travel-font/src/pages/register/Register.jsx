@@ -3,9 +3,18 @@ import { Button, Form, Icon, Input, message as aMessage } from "antd";
 import { withRouter } from "react-router-dom";
 import style from "./register.module.scss";
 import http from "@utils/http";
+import { connect } from "react-redux";
+import { setUser } from "@redux/action";
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  setUser: (user) => {
+    dispatch(setUser(user));
+  }
+});
 
 @withRouter
 @Form.create()
+@connect(null, mapDispatchToProps)
 class Register extends React.Component {
   validateConfirmPassword = (rule, value, callback) => {
     if (value && value !== this.props.form.getFieldValue("password")) {
@@ -22,13 +31,8 @@ class Register extends React.Component {
         if (status === 1) {
           localStorage.setItem("token", data);
           aMessage.success("注册成功");
-          const { data: { status, data: data1, message } } = await http.get("http://localhost:8080/api/sys/menu");
-          if (status === 1) {
-            localStorage.setItem("userRoutes", data1.join(","));
-            this.props.history.push("/");
-          } else {
-            aMessage.error(message);
-          }
+          this.props.setUser();
+          this.props.history.push("/");
         } else {
           aMessage.error(message);
         }

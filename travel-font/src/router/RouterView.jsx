@@ -2,21 +2,13 @@ import React from "react";
 import { HashRouter, Switch, Route, Redirect, matchPath } from "react-router-dom";
 import routeMap from "./routeMap";
 
-const baseRoutes = [ "/", "/home/strategy", "/login", "/register", "/404" ];
+const baseRoutes = [ "/", "/home", "/home/strategy", "/login", "/register", "/404" ];
 
 const authenticateRoute = (item) => {
   let routes = [];
   let storageRoutes = localStorage.getItem("userRoutes");
   if (storageRoutes) {
     routes = storageRoutes.split(",");
-  } else {
-    if (!baseRoutes.some((pathname) => !!matchPath(pathname, {
-      path: item.fullPath,
-      exact: true
-    }))) {
-      // 未登录时baseRoutes之外的路由重定向到 login
-      return <Redirect to={{ pathname: "/login" }} />;
-    }
   }
   if (baseRoutes.concat(routes).some((pathname) => !!matchPath(pathname, { path: item.fullPath }))) {
     if (item.name) {
