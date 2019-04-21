@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(rollbackFor = { RuntimeException.class, BusinessException.class })
     @Override
-    public String login(UserRegisterDto userRegisterDto, HttpSession session) throws Exception {
+    public String login(UserRegisterDto userRegisterDto) throws Exception {
         UserDo userDo = new UserDo();
         userDo.setUserName(userRegisterDto.getUserName());
         UserDo user = dao.getOne("com.travel.mapper.user.UserDoMapper.getUserByUserDo", userDo);
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String register(UserRegisterDto userRegisterDto, HttpSession session) throws Exception {
+    public String register(UserRegisterDto userRegisterDto) throws Exception {
         UserDo userDo = new UserDo();
         BeanUtils.copyProperties(userRegisterDto, userDo);
         String uuid = StringUtils.getUUid();
@@ -66,5 +66,10 @@ public class UserServiceImpl implements UserService {
         SessionEntity sessionEntity = new SessionEntity();
         BeanUtils.copyProperties(userDo, sessionEntity);
         return CacheUtils.setCache(sessionEntity);
+    }
+
+    @Override
+    public SessionEntity getUserInfo(HttpServletRequest request) {
+        return (SessionEntity) CacheUtils.getCache(request.getHeader("token"));
     }
 }

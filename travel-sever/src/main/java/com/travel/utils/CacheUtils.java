@@ -15,7 +15,7 @@ public class CacheUtils {
     // 过期时间 ms
     private static final int delayTime = 1000 * 30 * 60;
 
-    @Scheduled(fixedDelay = delayTime)
+    @Scheduled(initialDelay = delayTime, fixedDelay = delayTime)
     private void checkDelay() {
         for (String key: cacheMap.keySet()) {
             long time = cacheMap.get(key).getTime();
