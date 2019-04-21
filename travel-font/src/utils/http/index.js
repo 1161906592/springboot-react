@@ -1,10 +1,7 @@
 import axios from "axios";
 import NProgress from "nprogress"
 import { message } from "antd";
-import { createHashHistory } from "history";
 NProgress.configure({ showSpinner: false });
-
-const router = createHashHistory();
 
 const axiosInstance = axios.create({
   // baseURL: process.env.BASE_API, // api的base_url
@@ -23,9 +20,6 @@ axiosInstance.interceptors.request.use((config) => {
 
 axiosInstance.interceptors.response.use((response) => {
   NProgress.done();
-  if (response.data.status === 4) {
-    router.push("/login")
-  }
   return response;
 }, (error) => {
   NProgress.done();
