@@ -28,7 +28,7 @@ class Strategy extends React.Component {
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         values.address = values.address.slice(0, -1);
-        const {data: {status, data, message}} = await http.get("http://localhost:8080/api/strategy", {
+        const {data: {status, data, message}} = await http.get("/api/strategy", {
           params: values
         });
         if (status === 1) {

@@ -1,10 +1,10 @@
 /**
  * @Author: liuyang
- * @Date: 2019-04-21 14:40
+ * @Date: 2019-04-30 10:40
  */
-import { SET_USER } from "@redux/action";
+import { SET_USER } from "@store/action";
 
-export default (state, action) => {
+const reducer = (state, action) => {
   const { preload } = action;
   switch (action.type) {
     case SET_USER:
@@ -12,4 +12,6 @@ export default (state, action) => {
     default:
       return state;
   }
-}
+};
+
+export default reducer;

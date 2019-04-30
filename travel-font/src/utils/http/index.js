@@ -4,7 +4,7 @@ import { message } from "antd";
 NProgress.configure({ showSpinner: false });
 
 const axiosInstance = axios.create({
-  // baseURL: process.env.BASE_API, // api的base_url
+  baseURL: "http://127.0.0.1:3001", // api的base_url
   timeout: 0, // 请求超时时间
   withCredentials: true,
   headers: {

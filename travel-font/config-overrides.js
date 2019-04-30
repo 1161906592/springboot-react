@@ -40,7 +40,7 @@ module.exports = function (config, env) {
       '@utils': resolve('src/utils'),
       '@pages': resolve('src/pages'),
       '@components': resolve('src/components'),
-      '@redux': resolve('src/redux')
+      '@store': resolve('src/store')
     }),
     // 装饰器
     addDecoratorsLegacy()

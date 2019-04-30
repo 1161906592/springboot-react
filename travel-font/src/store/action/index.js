@@ -1,13 +1,13 @@
 /**
  * @Author: liuyang
- * @Date: 2019-04-21 14:40
+ * @Date: 2019-04-30 10:41
  */
 import http from "@utils/http";
 
 export const SET_USER = "setUser";
 
-const getUserBasicInfo = async () => {
-  const { data: { status, data } } = await http.get("http://localhost:8080/api/user/basicInfo");
+async function getUserBasicInfo () {
+  const { data: { status, data } } = await http.get("/api/user/basicInfo");
   if (status === 1) {
     return {
       user: data
@@ -17,11 +17,11 @@ const getUserBasicInfo = async () => {
       user: {}
     };
   }
-};
+}
 
-export const setUser = async () => {
+export async function setUser () {
   return {
     type: SET_USER,
     preload: await getUserBasicInfo()
   };
-};
+}
