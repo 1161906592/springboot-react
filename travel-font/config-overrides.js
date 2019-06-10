@@ -37,10 +37,10 @@ module.exports = function (config, env) {
       style: "css"
     }),
     addWebpackAlias({
-      '@utils': resolve('src/utils'),
-      '@pages': resolve('src/pages'),
-      '@components': resolve('src/components'),
-      '@store': resolve('src/store')
+      "@utils": resolve("src/utils"),
+      "@pages": resolve("src/pages"),
+      "@components": resolve("src/components"),
+      "@store": resolve("src/store")
     }),
     // 装饰器
     addDecoratorsLegacy()

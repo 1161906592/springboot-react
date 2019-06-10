@@ -7,11 +7,7 @@
   <meta name="theme-color" content="#000000"/>
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json"/>
   <% for (var i in htmlWebpackPlugin.options.injectOption&&htmlWebpackPlugin.options.injectOption.css) { %>
-  <link href="<%= htmlWebpackPlugin.options.injectOption.css[i] %>" rel="preload" as="style"/>
   <link href="<%= htmlWebpackPlugin.options.injectOption.css[i] %>" rel="stylesheet"/>
-  <% } %>
-  <% for (var i in htmlWebpackPlugin.options.injectOption&&htmlWebpackPlugin.options.injectOption.js) { %>
-  <link href="<%= htmlWebpackPlugin.options.injectOption.js[i] %>" rel="preload" as="script" />
   <% } %>
   <title>旅游攻略</title>
 </head>

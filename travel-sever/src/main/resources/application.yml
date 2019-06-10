@@ -11,4 +11,4 @@ server:
     session:
       timeout: 3600s
     context-path: /api
-  port: 8080
+  port: 3001
