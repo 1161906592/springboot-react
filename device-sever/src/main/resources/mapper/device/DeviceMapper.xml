@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhn.device.DeviceMapper">
+    <resultMap id="deviceResultMap" type="com.zhn.device.vo.DeviceVO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="typeId" column="type_id"/>
+        <result property="typeName" column="type_name"/>
+        <result property="model" column="model"/>
+        <result property="price" column="price"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_Name"/>
+        <result property="location" column="location"/>
+        <result property="date" column="date"/>
+        <result property="invoice" column="invoice"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    <select id="getDeviceList" resultMap="deviceResultMap" parameterType="com.zhn.device.dto.DeviceQueryDTO">
+        select device.*, device_type.name as type_name, user.name as user_name from device
+        left join device_type
+        on device.type_id = device_type.id
+        left join user
+        on device.user_id = user.id
+        <trim prefix="where" prefixOverrides="where" suffixOverrides="and">
+            <if test="name != null">
+                device.name like CONCAT('%', #{name}, '%') and
+            </if>
+            <if test="userId != null and userId != ''">
+                device.user_id = #{userId} and
+            </if>
+        </trim>
+        order by device.update_time desc
+    </select>
+    <insert id="insertDevice" parameterType="com.zhn.device.dto.DeviceInsertDTO">
+        insert into device
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id, name, type_id, model, price, user_id, location, date, update_time,
+            <if test="invoice != null">
+                invoice,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+        </trim>
+        value
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{id}, #{name}, #{typeId}, #{model}, #{price}, #{userId}, #{location}, #{date}, now(),
+            <if test="invoice != null">
+                #{invoice},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateDevice" parameterType="com.zhn.device.dto.DeviceUpdateDTO">
+        update device set
+        name = #{name},
+        type_id = #{typeId},
+        model = #{model},
+        price = #{price},
+        user_id = #{userId},
+        location = #{location},
+        date = #{date},
+        invoice = #{invoice},
+        remark = #{remark},
+        update_time = now()
+        where id = #{id}
+    </update>
+    <delete id="deleteDevice" parameterType="String">
+        delete from device where id = #{id}
+    </delete>
+</mapper>

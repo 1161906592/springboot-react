@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhn.user.UserMapper">
+    <select id="findUser" resultType="com.zhn.user.bean.User" parameterType="String">
+        select id, tel, name, role, password from user
+        <trim prefix="where" suffixOverrides="and">
+            <if test="name != null">
+                name like CONCAT('%', #{name}, '%') and
+            </if>
+            <if test="tel != null">
+                tel = #{tel} and
+            </if>
+        </trim>
+        order by update_time desc
+    </select>
+    <insert id="insertUser" parameterType="com.zhn.user.dto.UserInsertDTO">
+        insert into user
+        (id, tel, name, role, password, update_time)
+        select
+        #{id}, #{tel}, #{name}, #{role}, "123456", now()
+        from dual where not exists (
+          select id from user where tel = #{tel}
+        )
+    </insert>
+    <update id="updateUser" parameterType="com.zhn.user.dto.UserUpdateDTO">
+        update user set
+        tel = #{tel},
+        name = #{name},
+        role = #{role},
+        password = "123456",
+        update_time = now()
+        where id = #{id} and not exists (
+            select a.id from (
+                select id from user
+                where name = #{name}
+                and id != #{id}
+            ) a
+        )
+    </update>
+    <delete id="deleteUser" parameterType="String">
+        delete from user where id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,47 @@
+POST http://localhost:3001/api/user/login
+Content-Type: application/json
+
+{
+  "tel": "18883944710",
+  "password": "123456"
+}
+###
+GET http://localhost:3001/api/user/pageUser?pageSize=10&pageNum=1&name=
+Accept: application/json
+
+###
+POST http://localhost:3001/api/device/device
+Content-Type: application/json
+
+{
+  "name": "测试名称11",
+  "model": "测试名称",
+  "userName": "测试名称",
+  "location": "测试名称",
+  "date": "2020-04-04T03:38:56.671Z",
+  "typeId": "123456",
+  "price": 123456.12,
+  "invoice": "188856548135623126596",
+  "remark": "被珠珠珠珠组"
+}
+###
+PUT http://localhost:3001/api/device/device
+Content-Type: application/json
+
+{
+  "id": "89a7c43bc6bf4067bdc2f14ee75b0fe6",
+  "name": "212222222222",
+  "model": "测试名称",
+  "userName": "测试名称",
+  "location": "测试名称",
+  "date": "2020-04-04T03:38:56.671Z",
+  "typeId": "123456",
+  "price": 123456.12,
+  "invoice": "",
+  "remark": ""
+}
+###
+DELETE http://localhost:3001/api/device/device?id=7fa4a31857324a258c97b065fad718a6
+Content-Type: application/json
+
+###
