@@ -9,6 +9,6 @@ mybatis:
 server:
   servlet:
     session:
-      timeout: 3600s
+      timeout: 3600
     context-path: /api
   port: 3001
