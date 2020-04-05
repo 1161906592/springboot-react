@@ -6,6 +6,7 @@ const router = createHashHistory();
 
 export const requestInterceptor = (config) => {
   NProgress.start();
+  config.headers.token = localStorage.getItem("token");
   return config;
 };
 

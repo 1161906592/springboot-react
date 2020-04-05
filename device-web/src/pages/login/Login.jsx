@@ -26,6 +26,7 @@ const Login = (props) => {
     } = await http.post(`/api/user/login`, values);
     if (status) {
       localStorage.setItem("userInfo", JSON.stringify(data));
+      localStorage.setItem("token", data.token);
       props.history.push("/");
     } else {
       antMsg.error(message);
