@@ -1,84 +1,21 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import style from "./DeviceManage.module.scss";
-import { Button, Divider, message as antMsg, Popconfirm, Table, Input, Select, Form } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Button, Divider, message as antMsg, Popconfirm, Table, Input, Select } from "antd";
+import { PlusOutlined, DownloadOutlined } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import http from "@/http";
 import moment from "moment";
 import DeviceModal from "./DeviceModal";
+import getUserLoginInfo from "@/utils/getUserLoginInfo";
 
 const DeviceManage = (props) => {
-  const columns = [
-    {
-      title: "序号",
-      dataIndex: "id",
-      key: "id",
-      align: "center",
-      width: 60,
-      render: (text, record, index) => {
-        return (pageNum - 1) * pageSize + index + 1;
-      }
-    },
-    { title: "名称", dataIndex: "name", key: "name" },
-    { title: "类型", dataIndex: "typeId", key: "typeId" },
-    { title: "规格", dataIndex: "model", key: "model" },
-    { title: "价格", dataIndex: "price", key: "price" },
-    { title: "使用者", dataIndex: "userName", key: "userId" },
-    { title: "定位", dataIndex: "location", key: "location" },
-    {
-      title: "购买日期",
-      dataIndex: "date",
-      key: "date",
-      render: (text, record) => {
-        return moment(record.lastModified).format("YYYY-MM-DD");
-      }
-    },
-    { title: "发票", dataIndex: "invoice", key: "invoice" },
-    { title: "备注", dataIndex: "remark", key: "remark" },
-    {
-      title: "操作",
-      dataIndex: "action",
-      key: "action",
-      align: "center",
-      width: 120,
-      render: (text, record) => (
-      <div className={style.handle} onClick={e => e.stopPropagation()}>
-        <span onClick={() => handleEdit(record)}>修改</span>
-        <Divider type="vertical" />
-        <Popconfirm title="确定删除?" onConfirm={() => doDelete(record.id)}>
-          <span>删除</span>
-        </Popconfirm>
-      </div>
-      )
-    }
-  ];
-  // 分页
-  let [pageSize, setPageSize] = useState(10);
-  let [pageNum, setPageNum] = useState(1);
-  let [total, setTotal] = useState(0);
+  const userInfo = useMemo(getUserLoginInfo, []);
   // 数据获取
   let [name, setName] = useState();
   let [userId, setUserId] = useState();
   const nameChange = (e) => setName(e.target.value);
   const userIdChange = (value) => {
-    console.log(value);
     setUserId(value)
-  };
-  // 分页参数
-  const pagination = {
-    showSizeChanger: true,
-    showTotal: total => `共 ${total} 条`,
-    pageSize,
-    total,
-    hideOnSinglePage: true,
-    onChange: (page, size) => {
-      size && setPageSize(size);
-      setPageNum(page);
-    },
-    onShowSizeChange: (current, size) => {
-      setPageSize(size);
-      setPageNum(current);
-    }
   };
   let [curItem, setCurItem] = useState({});
   // 创建空间
@@ -95,19 +32,24 @@ const DeviceManage = (props) => {
     setCurItem(item);
     setCreateVisible(true)
   };
-  const doDelete = async (id) => {
+  let [ userOption, setUserOption ] = useState([]);
+  const getUserOption = useCallback(async () => {
     let {
-      data: { status, message }
-    } = await http.delete(`/api/device/device`, {
-      params: { id }
-    });
+      data: { status, data, message }
+    } = await http.get(`/api/user/userOption`);
     if (status) {
-      antMsg.success("删除成功");
-      getTableData();
+      setUserOption(data);
     } else {
       antMsg.error(message);
     }
-  };
+  }, []);
+  useEffect(() => {
+    getUserOption();
+  }, [getUserOption]);
+  // 分页
+  let [pageSize, setPageSize] = useState(10);
+  let [pageNum, setPageNum] = useState(1);
+  let [total, setTotal] = useState(0);
   // 表格数据
   let [tableDta, setTableData] = useState([]);
   // loading
@@ -143,20 +85,91 @@ const DeviceManage = (props) => {
   useEffect(() => {
     getTableData();
   }, [getTableData]);
-  let [ userOption, setUserOption ] = useState([]);
-  const getUserOption = useCallback(async () => {
+  const handleExport = () => {
+    let a = document.createElement("a");
+    a.href = `/api/device/exportDevice?userId=${userId || ""}&name=${name || ""}`;
+    a.dispatchEvent(new MouseEvent("click"));
+  };
+  const doDelete = useCallback(async (id) => {
     let {
-      data: { status, data, message }
-    } = await http.get(`/api/user/userOption`);
+      data: { status, message }
+    } = await http.delete(`/api/device/device`, {
+      params: { id }
+    });
     if (status) {
-      setUserOption(data);
+      antMsg.success("删除成功");
+      getTableData();
     } else {
       antMsg.error(message);
     }
-  }, []);
-  useEffect(() => {
-    getUserOption();
-  }, [getUserOption]);
+  }, [getTableData]);
+  const columns = useMemo(() => {
+    let result = [
+      {
+        title: "序号",
+        dataIndex: "id",
+        key: "id",
+        align: "center",
+        width: 60,
+        render: (text, record, index) => {
+          return (pageNum - 1) * pageSize + index + 1;
+        }
+      },
+      { title: "名称", dataIndex: "name", key: "name" },
+      { title: "类型", dataIndex: "typeId", key: "typeId" },
+      { title: "规格", dataIndex: "model", key: "model" },
+      { title: "价格", dataIndex: "price", key: "price" },
+      { title: "使用者", dataIndex: "userName", key: "userId" },
+      { title: "定位", dataIndex: "location", key: "location" },
+      {
+        title: "购买日期",
+        dataIndex: "date",
+        key: "date",
+        render: (text, record) => {
+          return moment(record.date).format("YYYY-MM-DD");
+        }
+      }
+    ];
+    if (userInfo.role === 1) {
+      result = result.concat([
+        { title: "发票", dataIndex: "invoice", key: "invoice" },
+        { title: "备注", dataIndex: "remark", key: "remark" },
+        {
+          title: "操作",
+          dataIndex: "action",
+          key: "action",
+          align: "center",
+          width: 120,
+          render: (text, record) => (
+          <div className={style.handle} onClick={e => e.stopPropagation()}>
+            <span onClick={() => handleEdit(record)}>修改</span>
+            <Divider type="vertical" />
+            <Popconfirm title="确定删除?" onConfirm={() => doDelete(record.id)}>
+              <span>删除</span>
+            </Popconfirm>
+          </div>
+          )
+        }
+      ])
+    }
+    return result;
+  }, [doDelete, pageNum, pageSize, userInfo.role]);
+  // 分页参数
+  const pagination = {
+    showSizeChanger: true,
+    showTotal: total => `共 ${total} 条`,
+    pageSize,
+    total,
+    hideOnSinglePage: true,
+    onChange: (page, size) => {
+      size && setPageSize(size);
+      setPageNum(page);
+    },
+    onShowSizeChange: (current, size) => {
+      setPageSize(size);
+      setPageNum(current);
+    }
+  };
   return (
     <>
       <div className={style.main}>
@@ -173,19 +186,22 @@ const DeviceManage = (props) => {
               onChange={userIdChange}
               allowClear
             >
-                {
-                  userOption.map((item, index) => {
-                    return <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
-                  })
-                }
+              {
+                userOption.map((item, index) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)
+              }
             </Select>
             <Button type="primary" onClick={getTableData}>
               查询
             </Button>
           </div>
-          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-            添加设备
-          </Button>
+          {
+            userInfo.role === 1 && (
+              <div className={style.left}>
+                <Button type={"default"} icon={<DownloadOutlined />} onClick={handleExport} style={{ marginRight: 8 }}>导出数据</Button>
+                <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>添加设备</Button>
+              </div>
+            )
+          }
         </div>
         <Table
           rowKey={record => record.name}

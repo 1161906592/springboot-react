@@ -6,7 +6,6 @@ const router = createHashHistory();
 
 export const requestInterceptor = (config) => {
   NProgress.start();
-  config.token = localStorage.getItem("token");
   return config;
 };
 
@@ -17,7 +16,7 @@ export const requestErrorInterceptor = (error) => {
 
 export const responseInterceptor = (response) => {
   NProgress.done();
-  if (!response.data.status && response.data.message === "连接信息错误！！！") {
+  if (!response.data.status && response.data.message === "请先登录系统") {
     router.push({ pathname: "/login" });
   }
   // todo

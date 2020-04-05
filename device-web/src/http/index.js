@@ -2,6 +2,8 @@ import axios from "axios";
 import httpConfig from "@/http/config";
 import { requestErrorInterceptor, requestInterceptor, responseErrorInterceptor, responseInterceptor } from "@/http/interceptors";
 
+axios.defaults.withCredentials = true;
+
 const http = axios.create(httpConfig);
 
 http.interceptors.request.use(requestInterceptor, requestErrorInterceptor);

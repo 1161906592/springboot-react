@@ -4,7 +4,7 @@ import Loading from "../components/loading/Loading";
 const routes = [
   {
     path: "/",
-    redirect: () => localStorage.getItem("historyPath") || "/home/user"
+    redirect: () => localStorage.getItem("historyPath") || "/home/device"
   },
   {
     path: "/login",

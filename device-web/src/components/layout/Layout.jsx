@@ -21,9 +21,9 @@ const CommonLayout = withRouter(props => {
   const menuList = useMemo(() => {
     const menuList = [
       { id: "1", name: "设备管理", icon: HomeOutlined, path: "/home/device" },
-      { id: "2", name: "人员管理", icon: UserOutlined, path: "/home/user" },
+      { id: "2", name: "人员管理", icon: UserOutlined, path: "/home/user", isAdmin: true },
     ];
-    if (userInfo.isAdmin) {
+    if (userInfo.role === 1) {
       return menuList;
     }
     return menuList.filter(d => !d.isAdmin);

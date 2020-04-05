@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/login")
-    public ResponseVO<UserLoginVO> login(@Validated @RequestBody UserLoginDTO userDto) throws Exception {
+    public ResponseVO<UserLoginVO> login(@Validated @RequestBody UserLoginDTO userDto, HttpServletResponse response) throws Exception {
         UserLoginVO userVO = userService.login(userDto);
         return new ResponseVO<>(userVO);
     }

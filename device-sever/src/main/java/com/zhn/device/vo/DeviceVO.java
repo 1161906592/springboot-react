@@ -1,5 +1,6 @@
 package com.zhn.device.vo;
 
+import com.zhn.common.annotation.ExportEntityField;
 import lombok.Data;
 
 import java.util.Date;
