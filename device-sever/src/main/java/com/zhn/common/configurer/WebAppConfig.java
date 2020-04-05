@@ -17,7 +17,6 @@ public class WebAppConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(myInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/device/exportDevice") // 登录
                 .excludePathPatterns("/user/login") // 登录
                 .excludePathPatterns("/user/logout"); // 退出
     }

@@ -14,13 +14,13 @@ import com.zhn.user.dto.UserQueryDTO;
 import com.zhn.user.dto.UserUpdateDTO;
 import com.zhn.user.service.UserService;
 import com.zhn.user.vo.UserLoginVO;
-import com.zhn.common.utils.CacheUtils;
 import com.zhn.user.vo.UserOptionVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     Dao dao;
 
     @Override
-    public UserLoginVO login(UserLoginDTO userDto) throws Exception {
+    public SessionEntity login(UserLoginDTO userDto, HttpServletRequest request) throws Exception {
         UserQueryDTO queryDTO = new UserQueryDTO();
         queryDTO.setTel(userDto.getTel());
         User user = dao.getOne("com.zhn.user.UserMapper.findUser", queryDTO);
@@ -39,20 +39,18 @@ public class UserServiceImpl implements UserService {
         if (!user.getPassword().equals(userDto.getPassword())) {
             throw new BusinessException("密码错误!");
         }
+        HttpSession session = request.getSession();
         SessionEntity sessionEntity = new SessionEntity();
         // 存session
         BeanUtils.copyProperties(user, sessionEntity);
-        String token = CacheUtils.setCache(sessionEntity);
+        session.setAttribute("sessionEntity", sessionEntity);
         // 返回前端
-        UserLoginVO userVO = new UserLoginVO();
-        BeanUtils.copyProperties(sessionEntity, userVO);
-        userVO.setToken(token);
-        return userVO;
+        return sessionEntity;
     }
 
     @Override
     public void logout(HttpServletRequest request) {
-        CacheUtils.removeCache(request.getHeader("token"));
+        request.getSession().setAttribute("sessionEntity", null);
     }
 
     @Override

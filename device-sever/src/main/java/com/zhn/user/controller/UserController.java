@@ -3,6 +3,7 @@ package com.zhn.user.controller;
 import com.zhn.common.bean.PageParamsDTO;
 import com.zhn.common.bean.PageResultVO;
 import com.zhn.common.bean.ResponseVO;
+import com.zhn.common.bean.SessionEntity;
 import com.zhn.user.dto.UserInsertDTO;
 import com.zhn.user.dto.UserUpdateDTO;
 import com.zhn.user.service.UserService;
@@ -24,9 +25,9 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/login")
-    public ResponseVO<UserLoginVO> login(@Validated @RequestBody UserLoginDTO userDto, HttpServletResponse response) throws Exception {
-        UserLoginVO userVO = userService.login(userDto);
-        return new ResponseVO<>(userVO);
+    public ResponseVO<SessionEntity> login(@Validated @RequestBody UserLoginDTO userDto, HttpServletRequest request) throws Exception {
+        SessionEntity sessionEntity = userService.login(userDto, request);
+        return new ResponseVO<>(sessionEntity);
     }
 
     @PostMapping("/logout")

@@ -5,7 +5,6 @@ import com.zhn.common.bean.PageParamsDTO;
 import com.zhn.common.bean.PageResultVO;
 import com.zhn.common.bean.SessionEntity;
 import com.zhn.common.dao.Dao;
-import com.zhn.common.utils.CacheUtils;
 import com.zhn.common.utils.StringUtils;
 import com.zhn.device.dto.DeviceInsertDTO;
 import com.zhn.device.dto.DeviceQueryDTO;
@@ -13,7 +12,6 @@ import com.zhn.device.dto.DeviceUpdateDTO;
 import com.zhn.device.service.DeviceService;
 import com.zhn.device.vo.DeviceExportVO;
 import com.zhn.device.vo.DeviceVO;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,10 +29,8 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public PageResultVO<DeviceVO> getDeviceList(DeviceQueryDTO deviceQueryDTO, PageParamsDTO pageParamsDTO, HttpServletRequest request) {
         Page<DeviceVO> deviceVoPage = dao.getPageList("com.zhn.device.DeviceMapper.getDeviceList", deviceQueryDTO, pageParamsDTO);
-        String cacheId = request.getHeader("token");
-        SessionEntity sessionEntity = (SessionEntity) CacheUtils.getCache(cacheId);
+        SessionEntity sessionEntity = (SessionEntity) request.getSession().getAttribute("sessionEntity");
         // 非系统管理员
-        assert sessionEntity != null;
         if (sessionEntity.getRole() != 1) {
             deviceVoPage.getResult().forEach(deviceVo -> {
                 deviceVo.setInvoice(null);

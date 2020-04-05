@@ -2,6 +2,7 @@ package com.zhn.user.service;
 
 import com.zhn.common.bean.PageParamsDTO;
 import com.zhn.common.bean.PageResultVO;
+import com.zhn.common.bean.SessionEntity;
 import com.zhn.user.dto.UserInsertDTO;
 import com.zhn.user.dto.UserLoginDTO;
 import com.zhn.user.dto.UserUpdateDTO;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface UserService {
-    UserLoginVO login(UserLoginDTO userRegisterDto) throws Exception;
+    SessionEntity login(UserLoginDTO userRegisterDto, HttpServletRequest request) throws Exception;
     void logout(HttpServletRequest request);
     PageResultVO<UserLoginVO> getPageUser(PageParamsDTO pageParamsDTO, String name);
     void insertUser(UserInsertDTO userInsertDTO) throws Exception;

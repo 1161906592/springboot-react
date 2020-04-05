@@ -9,7 +9,7 @@ public class SessionEntity {
 
     private String name;
 
-    private String realName;
+    private String tel;
 
     private int role;
 }
